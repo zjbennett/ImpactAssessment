@@ -58,6 +58,7 @@
     "subnetPrefix": "10.0.0.0/24",
     "publicIPAddressName": "myPublicIP",
     "vmName": "[parameters('vmname')]",
+    "networkSecurityGroupName": "[parameters('vmname')]",
     "virtualNetworkName": "winVM",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
   },
@@ -73,6 +74,58 @@
       "kind": "Storage",
       "properties": {}
     },
+    {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "name": "[variables('networkSecurityGroupName')]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "securityRules": [
+            {
+              "name": "RDP",
+              "properties": {
+                "description": "RDP Rule",
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "3389",
+                "sourceAddressPrefix": "Internet",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 300,
+                "direction": "Inbound"
+              }
+            },
+            {
+                "name": "Audio_Inbound",
+                "properties": {
+                  "description": "Audio_Inbound",
+                  "protocol": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "50000, 50500",
+                  "sourceAddressPrefix": "Internet",
+                  "destinationAddressPrefix": "*",
+                  "access": "Allow",
+                  "priority": 310,
+                  "direction": "Inbound"
+                }
+            },
+            {
+                "name": "Audio_Outbound",
+                "properties": {
+                  "description": "Audio_Outbound",
+                  "protocol": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "50000, 50500",
+                  "sourceAddressPrefix": "Internet",
+                  "destinationAddressPrefix": "*",
+                  "access": "Allow",
+                  "priority": 110,
+                  "direction": "Outbound"
+                }
+            }
+          ]
+        }
+      },
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2018-11-01",
