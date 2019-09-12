@@ -59,7 +59,7 @@
     "publicIPAddressName": "myPublicIP",
     "vmName": "[parameters('vmname')]",
     "networkSecurityGroupName": "[parameters('vmname')]",
-    "virtualNetworkName": "winVM",
+    "virtualNetworkName": "[parameters('vmname')]",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
   },
   "resources": [
